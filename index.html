@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para alguien muy especial</title>
+    <!-- Fuentes de Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Sacramento&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Contenedor principal estilo tarjeta de cristal */
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            z-index: 10;
+            transition: all 0.5s ease;
+        }
+
+        h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 3.5rem;
+            color: #d63384;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Estilos del sobre */
+        .envelope-container {
+            cursor: pointer;
+            margin: 20px auto;
+            width: 120px;
+            height: 90px;
+            background: #ff4d6d;
+            position: relative;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .envelope-container:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-top: 50px solid #e01a4f;
+            transform-origin: top;
+            transition: transform 0.4s ease;
+        }
+
+        .open-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .instruction {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Mensaje oculto al abrir el sobre */
+        .hidden-message {
+            display: none;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .buttons-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            position: relative;
+            height: 50px;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-yes {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.4);
+        }
+
+        .btn-yes:hover {
+            background-color: #e01a4f;
+            transform: scale(1.05);
+        }
+
+        .btn-no {
+            background-color: #e2e8f0;
+            color: #4a5568;
+            position: absolute;
+        }
+
+        /* Pantalla de éxito al decir que sí */
+        .success-screen {
+            display: none;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .success-screen h2 {
+            font-family: 'Sacramento', cursive;
+            font-size: 3rem;
+            color: #d63384;
+            margin-bottom: 10px;
+        }
+
+        /* Corazones flotantes de fondo */
+        .heart {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            transform: rotate(45deg);
+            animation: floatUp 6s linear infinite;
+            z-index: 1;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -50%;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: -50%;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(45deg) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(45deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tarjeta central -->
+    <div class="card" id="mainCard">
+        <div id="initialView">
+            <h1>Holaa... ✨</h1>
+            <p>Hice esto exclusivamente para ti porque quería sacarte una sonrisa hoy y pa que deje de decir que soy mentiroso jajaj.</p>
+            
+            <!-- Sobre interactivo -->
+            <div class="envelope-container" onclick="openEnvelope()">
+                <div class="envelope-flap" id="flap"></div>
+            </div>
+            <div class="instruction">Toca el sobre para abrirlo</div>
+        </div>
+
+        <!-- Mensaje secreto que aparece al abrir -->
+        <div class="hidden-message" id="secretMessage">
+            <h1>Para ti ❤️</h1>
+            <p>Desde que te conozco, cada momento es más bonito y especial. Tienes unos ojos que iluminan cualquier día.<br><br><b>¿Cuando tenga partido va a verme jugar?</b></p>
+            
+            <div class="buttons-group" id="btnGroup">
+                <button class="btn btn-yes" onclick="sayYes()">¡Sí, claro que sí! 🥰</button>
+                <button class="btn btn-no" id="btnNo" onmouseover="moveButton()" onclick="moveButton()">No 🙈</button>
+            </div>
+        </div>
+
+        <!-- Pantalla de respuesta afirmativa -->
+        <div class="success-screen" id="successScreen">
+            <h2>¡Sabía que dirías que sí espero! 🎉</h2>
+            <p>Me has hecho el día más feliz. Prepárate, para dedicarle goles. 😉💌</p>
+        </div>
+    </div>
+
+    <!-- Script de JavaScript con las interacciones -->
+    <script>
+        // Función para abrir el sobre con animación
+        function openEnvelope() {
+            const flap = document.getElementById('flap');
+            flap.classList.add('open-flap');
+            
+            setTimeout(() => {
+                document.getElementById('initialView').style.display = 'none';
+                document.getElementById('secretMessage').style.display = 'block';
+            }, 400);
+        }
+
+        // Función traviesa para que el botón "No" huya del cursor
+        function moveButton() {
+            const btnNo = document.getElementById('btnNo');
+            const card = document.getElementById('mainCard');
+            
+            // Obtener límites de la tarjeta para que no se salga
+            const cardRect = card.getBoundingClientRect();
+            
+            // Calcular posiciones aleatorias dentro del contenedor
+            const maxX = cardRect.width - 100;
+            const maxY = 80;
+            
+            const randomX = Math.random() * maxX - (maxX / 2);
+            const randomY = Math.random() * maxY;
+            
+            btnNo.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        // Función cuando acepta
+        function sayYes() {
+            document.getElementById('secretMessage').style.display = 'none';
+            document.getElementById('successScreen').style.display = 'block';
+            
+            // Disparar más corazones de alegría
+            createBurstHearts();
+        }
+
+        // Generar corazones flotantes automáticamente en el fondo
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // Tamaños y posiciones aleatorias
+            const size = Math.random() * 20 + 10;
+            heart.style.width = `${size}px`;
+            heart.style.height = `${size}px`;
+            heart.style.left = `${Math.random() * 100}vw`;
+            
+            // Duración de animación aleatoria
+            heart.style.animationDuration = `${Math.random() * 3 + 4}s`;
+            
+            document.body.appendChild(heart);
+            
+            // Eliminar el corazón cuando termine la animación para no saturar memoria
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
+        }
+
+        // Crear corazones constantemente cada 400 milisegundos
+        setInterval(createHeart, 400);
+
+        function createBurstHearts() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
